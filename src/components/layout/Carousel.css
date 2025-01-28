@@ -1,0 +1,34 @@
+/* src/components/layout/Carousel.css */
+.embla {
+    /* overflow: hidden; */
+    width: 100%;
+    height: 100%;
+  }
+  
+  .embla__container {
+    display: flex;
+    height: 100%;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .embla__slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+  }
+  
+  .embla__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* Optional: Add transition for smoothness */
+    transition: transform 0.3s ease;
+  }
+  
+  .embla__slide img:hover {
+    transform: scale(1.01);
+  }
+  
