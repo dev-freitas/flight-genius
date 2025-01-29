@@ -19,14 +19,20 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { format } from 'date-fns';
 
+import { format } from 'date-fns';
+import { enGB } from 'date-fns/locale'; // Importando a localidade enGB
 import emailjs from '@emailjs/browser';
+
+// Se estiver usando React Router:
+import { useNavigate } from 'react-router-dom';
 
 // Chave para localStorage
 const STORAGE_KEY = 'quoteFormData';
 
 function QuoteRequestForm() {
+  const navigate = useNavigate(); // para redirecionamento
+
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -35,15 +41,13 @@ function QuoteRequestForm() {
     destino: '',
     dataIda: null,
     dataRetorno: null,
-    flexibilidadeDatas: '', // 'sim', 'nao'
+    flexibilidadeDatas: '', // 'sim' ou 'nao'
     numeroAdultos: 1,
     numeroCriancas: 0,
     bagagens: 0,
-    servicos: [], // ['Hotel', 'Transfer', ...]
-    querPacote: false,
+    servicos: [],
     observacoes: '',
-    childAges: [], // Campo para idades das crianças
-    // uploadFile: null, // Removido
+    childAges: [],
   });
 
   const [errors, setErrors] = useState({});
@@ -68,52 +72,53 @@ function QuoteRequestForm() {
   // Salvamento no localStorage sempre que formData muda
   useEffect(() => {
     const dataToSave = { ...formData };
-    // Convertendo objetos Date para strings para armazenamento
-    if (dataToSave.dataIda) dataToSave.dataIda = dataToSave.dataIda.toISOString();
-    if (dataToSave.dataRetorno) dataToSave.dataRetorno = dataToSave.dataRetorno.toISOString();
+    if (dataToSave.dataIda) {
+      dataToSave.dataIda = dataToSave.dataIda.toISOString();
+    }
+    if (dataToSave.dataRetorno) {
+      dataToSave.dataRetorno = dataToSave.dataRetorno.toISOString();
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
   }, [formData]);
 
-  // Função para atualizar campos do formulário
+  // Atualizar campos do formulário
   const handleFieldChange = (field, value) => {
     setFormData((prev) => {
-      const updatedData = { ...prev, [field]: value };
-      
-      // Se o campo alterado for 'numeroCriancas', ajustar o array 'childAges'
+      const updated = { ...prev, [field]: value };
+
+      // Se mudou o número de crianças, ajustar array de idades
       if (field === 'numeroCriancas') {
         const currentAges = prev.childAges;
         const newAges = [...currentAges];
-        
+
         if (value > currentAges.length) {
-          // Adicionar entradas vazias para as novas crianças
+          // Adiciona entradas vazias para as novas crianças
           for (let i = currentAges.length; i < value; i++) {
             newAges.push('');
           }
         } else if (value < currentAges.length) {
-          // Remover entradas excedentes
+          // Remove entradas excedentes
           newAges.splice(value);
         }
-        
-        updatedData.childAges = newAges;
+        updated.childAges = newAges;
       }
-      
-      return updatedData;
+
+      return updated;
     });
   };
 
-  // Função para lidar com seleção de serviços extras
+  // Serviços extras
   const handleServicoChange = (service) => {
     setFormData((prev) => {
-      const current = prev.servicos;
-      if (current.includes(service)) {
-        return { ...prev, servicos: current.filter((s) => s !== service) };
-      } else {
-        return { ...prev, servicos: [...current, service] };
+      const { servicos } = prev;
+      if (servicos.includes(service)) {
+        return { ...prev, servicos: servicos.filter((s) => s !== service) };
       }
+      return { ...prev, servicos: [...servicos, service] };
     });
   };
 
-  // Validação do formulário
+  // Função que valida e **retorna** os erros
   const validateForm = () => {
     const newErrors = {};
 
@@ -128,18 +133,35 @@ function QuoteRequestForm() {
     // Dados da Viagem
     if (!formData.origem.trim()) newErrors.origem = 'Informe a cidade de origem.';
     if (!formData.destino.trim()) newErrors.destino = 'Informe a cidade de destino.';
-    if (!formData.dataIda) newErrors.dataIda = 'Selecione a data de ida.';
-    if (!formData.dataRetorno) newErrors.dataRetorno = 'Selecione a data de retorno.';
-    if (
-      formData.dataIda &&
-      formData.dataRetorno &&
-      formData.dataRetorno.getTime() < formData.dataIda.getTime()
-    ) {
+
+    // Validação Data de Ida
+    if (!formData.dataIda) {
+      newErrors.dataIda = 'Selecione a data de ida.';
+    } else {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (formData.dataIda < today) {
+        newErrors.dataIda = 'A data de ida deve ser hoje ou uma data futura.';
+      }
+    }
+
+    // Validação Data de Retorno
+    if (!formData.dataRetorno) {
+      newErrors.dataRetorno = 'Selecione a data de retorno.';
+    } else if (formData.dataIda && formData.dataRetorno < formData.dataIda) {
       newErrors.dataRetorno = 'Data de retorno não pode ser antes da data de ida.';
     }
-    if (formData.numeroAdultos < 1) newErrors.numeroAdultos = 'Deve haver pelo menos 1 adulto.';
-    if (formData.numeroCriancas < 0) newErrors.numeroCriancas = 'Número de crianças inválido.';
-    if (formData.bagagens < 0) newErrors.bagagens = 'Número de bagagens inválido.';
+
+    // Passageiros
+    if (formData.numeroAdultos < 1) {
+      newErrors.numeroAdultos = 'Deve haver pelo menos 1 adulto.';
+    }
+    if (formData.numeroCriancas < 0) {
+      newErrors.numeroCriancas = 'Número de crianças inválido.';
+    }
+    if (formData.bagagens < 0) {
+      newErrors.bagagens = 'Número de bagagens inválido.';
+    }
 
     // Idades das Crianças
     if (formData.numeroCriancas > 0) {
@@ -152,23 +174,29 @@ function QuoteRequestForm() {
       });
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
-  // Envio do formulário
+  // Quando o usuário clica em 'Enviar'
   const handleSubmit = () => {
-    if (!validateForm()) {
-      // Scroll até o primeiro erro
-      const firstErrorField = Object.keys(errors)[0];
+    // Gera erros de validação
+    const newErrors = validateForm();
+    // Define no estado para que apareçam nas TextFields
+    setErrors(newErrors);
+
+    // Verifica se existe algum erro
+    const hasErrors = Object.keys(newErrors).length > 0;
+    if (hasErrors) {
+      // Opcional: fazer scroll até o primeiro erro
+      const firstErrorField = Object.keys(newErrors)[0];
       const element = document.getElementById(`field-${firstErrorField}`);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-      return;
+      return; // Impede o envio
     }
 
-    // Configuração do EmailJS
+    // Se não há erros, dispara o email
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID_ORDER;
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
@@ -186,37 +214,14 @@ function QuoteRequestForm() {
       numeroCriancas: formData.numeroCriancas,
       bagagens: formData.bagagens,
       servicos: formData.servicos.join(', ') || 'Nenhum',
-      querPacote: formData.querPacote ? 'Sim' : 'Não',
       observacoes: formData.observacoes || 'Nenhuma',
       childAges: formData.childAges.join(', ') || 'Nenhuma',
-      // uploadFile: formData.uploadFile ? 'Sim' : 'Não', // Removido
     };
-
-    console.log('Dados do Email:', emailData); // Para depuração
 
     emailjs
       .send(serviceId, templateId, emailData, publicKey)
       .then(() => {
         setOpenModal(true);
-        // Opcional: limpar formulário ou localStorage
-        // setFormData({
-        //   nome: '',
-        //   email: '',
-        //   telefone: '',
-        //   origem: '',
-        //   destino: '',
-        //   dataIda: null,
-        //   dataRetorno: null,
-        //   flexibilidadeDatas: '',
-        //   numeroAdultos: 1,
-        //   numeroCriancas: 0,
-        //   bagagens: 0,
-        //   servicos: [],
-        //   querPacote: false,
-        //   observacoes: '',
-        //   childAges: [],
-        // });
-        // localStorage.removeItem(STORAGE_KEY);
       })
       .catch((error) => {
         console.error('Erro ao enviar o e-mail:', error);
@@ -224,13 +229,15 @@ function QuoteRequestForm() {
       });
   };
 
-  // Fechar o modal de sucesso
+  // Fecha modal e vai pra Home
   const handleCloseModal = () => {
     setOpenModal(false);
+    navigate('/'); // se estiver usando react-router-dom
+    // ou: window.location.href = '/';
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} locale={enGB}>
       <Box
         sx={{
           width: '100%',
@@ -320,15 +327,16 @@ function QuoteRequestForm() {
                 label="Data de Ida"
                 value={formData.dataIda}
                 onChange={(newValue) => handleFieldChange('dataIda', newValue)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    id="field-dataIda"
-                    fullWidth
-                    error={Boolean(errors.dataIda)}
-                    helperText={errors.dataIda}
-                  />
-                )}
+                inputFormat="dd/MM/yyyy" // Definindo o formato da data
+                slots={{ textField: TextField }}
+                slotProps={{
+                  textField: {
+                    id: 'field-dataIda',
+                    fullWidth: true,
+                    error: Boolean(errors.dataIda),
+                    helperText: errors.dataIda,
+                  },
+                }}
               />
             </Grid>
             <Grid item xs={11} sm={6}>
@@ -336,21 +344,24 @@ function QuoteRequestForm() {
                 label="Data de Retorno"
                 value={formData.dataRetorno}
                 onChange={(newValue) => handleFieldChange('dataRetorno', newValue)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    id="field-dataRetorno"
-                    fullWidth
-                    error={Boolean(errors.dataRetorno)}
-                    helperText={errors.dataRetorno}
-                  />
-                )}
+                inputFormat="dd/MM/yyyy" // Definindo o formato da data
+                slots={{ textField: TextField }}
+                slotProps={{
+                  textField: {
+                    id: 'field-dataRetorno',
+                    fullWidth: true,
+                    error: Boolean(errors.dataRetorno),
+                    helperText: errors.dataRetorno,
+                  },
+                }}
               />
             </Grid>
 
             {/* Flexibilidade nas Datas */}
             <Grid item xs={11}>
-              <Typography variant="subtitle1">Flexibilidade nas datas? (+/- 3 dias)</Typography>
+              <Typography variant="subtitle1">
+                Flexibilidade nas datas? (+/- 3 dias)
+              </Typography>
               <RadioGroup
                 row
                 value={formData.flexibilidadeDatas}
@@ -389,7 +400,7 @@ function QuoteRequestForm() {
               />
             </Grid>
 
-            {/* Quantidade de Bagagens */}
+            {/* Bagagens */}
             <Grid item xs={11}>
               <TextField
                 id="field-bagagens"
@@ -404,7 +415,7 @@ function QuoteRequestForm() {
               />
             </Grid>
 
-            {/* Campos Dinâmicos para Idades das Crianças */}
+            {/* Idades das Crianças */}
             {formData.numeroCriancas > 0 && (
               <Grid item xs={11}>
                 <Typography variant="subtitle1">Idade das Crianças:</Typography>
@@ -509,14 +520,14 @@ function QuoteRequestForm() {
         {/* Seção: Observações */}
         <section>
           <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-            Observações ou Requerimentos <br/>Especiais
+            Observações ou Requerimentos Especiais
           </Typography>
           <TextField
             id="field-observacoes"
             sx={{
-              width: { xs: '90%', sm: 'auto' }, // 100% em telas móveis, auto em telas maiores
-              mr: { xs: 0, sm: 2 }, // Margem direita somente em telas maiores
-              mb: { xs: 2, sm: 0 }, // Margem inferior somente em telas móveis
+              width: { xs: '90%', sm: 'auto' },
+              mr: { xs: 0, sm: 2 },
+              mb: { xs: 2, sm: 0 },
             }}
             multiline
             rows={4}
@@ -551,8 +562,5 @@ function QuoteRequestForm() {
     </LocalizationProvider>
   );
 }
-
-/** ==================== PropTypes ==================== */
-QuoteRequestForm.propTypes = {};
 
 export default QuoteRequestForm;
