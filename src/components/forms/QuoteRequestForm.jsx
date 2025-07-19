@@ -520,22 +520,22 @@ function QuoteRequestForm() {
         {/* Seção: Observações */}
         <section>
           <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-            Observações ou Requerimentos Especiais
+            Requerimentos Especiais
           </Typography>
-          <TextField
-            id="field-observacoes"
-            sx={{
-              width: { xs: '90%', sm: 'auto' },
-              mr: { xs: 0, sm: 2 },
-              mb: { xs: 2, sm: 0 },
-            }}
-            multiline
-            rows={4}
-            label="Comentários adicionais"
-            value={formData.observacoes}
-            onChange={(e) => handleFieldChange('observacoes', e.target.value)}
-          />
         </section>
+        <TextField
+          id="field-observacoes"
+          label="Comentários adicionais"
+          multiline
+          rows={4}
+          value={formData.observacoes}
+          onChange={(e) => handleFieldChange('observacoes', e.target.value)}
+          sx={{
+            width: '90%',
+            maxWidth: 400,
+            mt: 2,
+          }}
+        />
 
         {/* Botão Enviar */}
         <Box textAlign="center" mt={4}>

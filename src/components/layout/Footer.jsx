@@ -1,7 +1,7 @@
 // src/components/layout/Footer.js
-import React from 'react';
 import { AppBar, Toolbar, Button, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import cadastur from '../../assets/images/cadastur-seeklogo1.png';
 
 function Footer() {
 
@@ -30,7 +30,18 @@ function Footer() {
           alignItems: 'center',
           justifyContent: 'space-between', // space out brand and link group
         }}
-      >
+        >
+        <Box
+          component="img"
+          src={cadastur}
+          alt="Flight Genius Logo"
+          sx={{
+            height: 40,
+            maxWidth: '100%',
+            mb: { xs: 2, sm: 0 }, // small bottom margin only on mobile
+            display: 'block',
+          }}
+        />
         {/* Left side (Brand or Copyright) */}
         <Typography
           variant="body2"

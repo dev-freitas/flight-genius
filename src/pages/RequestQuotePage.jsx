@@ -1,5 +1,4 @@
 // RequestQuotePage.js
-import React from 'react';
 import QuoteRequestForm from '../components/forms/QuoteRequestForm';
 import { Box } from '@mui/material';
 

@@ -43,7 +43,7 @@ function ContactPage() {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
           <PhoneIcon sx={{ mr: 1 }} />
-          <Typography variant="body1">+44 1234 567 890 (TBD)</Typography>
+          <Typography variant="body1">+44 07459 173191</Typography>
         </Box>
 
         {/* Example of separate list (if needed) */}
