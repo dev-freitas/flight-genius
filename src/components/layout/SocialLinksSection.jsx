@@ -3,7 +3,7 @@ import { Box, Container, Grid, IconButton, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 
 export default function SocialLinksSection({
-  padding = 4,
+  padding = 3,
   bg = "background.paper",
   links = [
     { icon: "fa-brands fa-instagram", label: "Instagram", href: "https://www.instagram.com/flightgeniusuk" },

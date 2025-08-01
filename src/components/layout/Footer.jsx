@@ -49,6 +49,12 @@ function Footer() {
         >
           &copy; {new Date().getFullYear()} Flight Genius
         </Typography>
+        <Typography
+          variant="body2"
+          sx={{ mb: { xs: 1, sm: 0 } }} // margin-bottom on mobile only
+        >
+          CNPJ - 58.298.040/0001-41
+        </Typography>
 
         {/* Right side (Links) */}
         <Box

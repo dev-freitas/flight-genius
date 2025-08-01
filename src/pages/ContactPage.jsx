@@ -20,7 +20,7 @@ function ContactPage() {
       .then(
         (result) => {
           console.log('Message Sent:', result.text);
-          alert('Thanks for reaching out! We will get back to you soon.');
+          alert('Obrigado pelo contato! Embreve entraremos em contato.');
           e.target.reset();
         },
         (error) => {
@@ -34,7 +34,7 @@ function ContactPage() {
     <Container maxWidth="sm">
       <Box sx={{ p: 4 }}>
         <Typography variant="h3" gutterBottom>
-          Contact Us
+          Contato
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>

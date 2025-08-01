@@ -29,10 +29,10 @@ function HomePage() {
       <SocialLinksSection
         bg="grey.50"
         links={[
-          { icon: "fa-brands fa-instagram", label: "Instagram", href: "https://instagram.com/seu_perfil" },
-          { icon: "fa-brands fa-facebook",  label: "Facebook",  href: "https://facebook.com/seu_perfil" },
-          { icon: "fa-brands fa-whatsapp",  label: "WhatsApp",  href: "https://wa.me/447700900123" },
-          { icon: "fa-regular fa-envelope", label: "Email",     href: "mailto:info@flightgenius.com" },
+          { icon: "fa-brands fa-instagram", label: "Instagram", href: "https://www.instagram.com/flightgeniusuk" },
+          { icon: "fa-brands fa-facebook",  label: "Facebook",  href: "https://www.facebook.com/photo/?fbid=122101537118750095&set=a.122101512944750095" },
+          { icon: "fa-brands fa-whatsapp",  label: "WhatsApp",  href: "https://wa.me/447459173191" },
+          { icon: "fa-regular fa-envelope", label: "Email",     href: "mailto:info@flightgenius.co.uk" },
         ]}
       />
         <KeyPointsSection />
