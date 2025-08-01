@@ -29,9 +29,9 @@ function Navbar() {
 
   const menuItems = [
     { text: 'Home', path: '/' },
-    { text: 'A Empresa', path: '/about' },
+    { text: 'Quem somos', path: '/about' },
     { text: 'Contato', path: '/contact' },
-    { text: 'Cotação Personalizada', path: '/request-quote' },
+    { text: 'Solicite Cotação', path: '/request-quote' },
   ];
 
   const drawer = (

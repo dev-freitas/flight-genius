@@ -4,6 +4,7 @@ import TestimonialCard from '../components/testimonials/TestimonialCard';
 import { Container, Box, Typography, Grid } from '@mui/material';
 import HeroBanner from "../components/layout/HeroBanner";
 import InfoSection from "../components/layout/InfoSection";
+import SocialLinksSection from "../components/layout/SocialLinksSection";
 import brazil from "../assets/images/brazil1.jpg";
 
 function HomePage() {
@@ -19,12 +20,21 @@ function HomePage() {
     <Box>
       <HeroBanner
         image={brazil}
-        title="Bora viajar"
+        title="Bora Viajar..."
         ctaPrimary={{ label: "Request a quote", onClick: () => {/* open form */} }}
         align="left"
       />
       {/* <FlightSearch /> */}
       <Container>
+      <SocialLinksSection
+        bg="grey.50"
+        links={[
+          { icon: "fa-brands fa-instagram", label: "Instagram", href: "https://instagram.com/seu_perfil" },
+          { icon: "fa-brands fa-facebook",  label: "Facebook",  href: "https://facebook.com/seu_perfil" },
+          { icon: "fa-brands fa-whatsapp",  label: "WhatsApp",  href: "https://wa.me/447700900123" },
+          { icon: "fa-regular fa-envelope", label: "Email",     href: "mailto:info@flightgenius.com" },
+        ]}
+      />
         <KeyPointsSection />
         <InfoSection bg="#bbbab842" />
         <Box sx={{ p: 4, textAlign: 'center' }}>

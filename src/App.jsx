@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar.jsx';
 import Footer from './components/layout/Footer.jsx';
+import WhatsAppFloatingButton from './components/layout/WhatsAppFloatingButton.jsx';
 import HomePage from './pages/HomePage.jsx';
 import AboutUsPage from './pages/AboutUsPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
@@ -27,6 +28,7 @@ function App() {
           <Route path="/request-quote" element={<RequestQuotePage />} />
         </Routes>
         <Footer />
+        <WhatsAppFloatingButton phone="+447700900123" />
       </Box>
     </Router>
   );

@@ -47,7 +47,7 @@ function Footer() {
           variant="body2"
           sx={{ mb: { xs: 1, sm: 0 } }} // margin-bottom on mobile only
         >
-          &copy; {new Date().getFullYear()} Airline Tickets
+          &copy; {new Date().getFullYear()} Flight Genius
         </Typography>
 
         {/* Right side (Links) */}
