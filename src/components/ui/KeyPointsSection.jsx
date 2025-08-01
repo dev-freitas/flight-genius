@@ -11,7 +11,7 @@ function KeyPointsSection() {
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" gutterBottom align="center">
-        Flight Genius +
+        Flight Genius
       </Typography>
       <Grid container spacing={4}>
         {points.map((point, i) => (

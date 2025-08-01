@@ -7,7 +7,7 @@ const theme = createTheme({
       main: '#0095de', // dark blue
     },
     secondary: {
-      main: '#0095de', // Blue
+      main: '#0094de60', // Blue
     },
     // Você pode adicionar cores personalizadas adicionais aqui, se necessário
     custom: {

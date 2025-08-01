@@ -1,8 +1,10 @@
 // src/pages/HomePage.js
-import Carousel from '../components/layout/Carousel';
 import KeyPointsSection from '../components/ui/KeyPointsSection';
 import TestimonialCard from '../components/testimonials/TestimonialCard';
 import { Container, Box, Typography, Grid } from '@mui/material';
+import HeroBanner from "../components/layout/HeroBanner";
+import InfoSection from "../components/layout/InfoSection";
+import brazil from "../assets/images/brazil1.jpg";
 
 function HomePage() {
   const testimonials = 
@@ -15,9 +17,16 @@ function HomePage() {
 
   return (
     <Box>
-      <Carousel />
+      <HeroBanner
+        image={brazil}
+        title="Bora viajar"
+        ctaPrimary={{ label: "Request a quote", onClick: () => {/* open form */} }}
+        align="left"
+      />
+      {/* <FlightSearch /> */}
       <Container>
         <KeyPointsSection />
+        <InfoSection bg="#bbbab842" />
         <Box sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h4" gutterBottom align="center">
             O que nossos clientes estão dizendo
