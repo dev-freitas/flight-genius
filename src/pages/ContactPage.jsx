@@ -55,14 +55,14 @@ function ContactPage() {
 
         <form ref={formRef} onSubmit={handleSubmit}>
           <TextField
-            label="Your Name"
+            label="Nome Completo"
             name="user_name"
             required
             fullWidth
             margin="normal"
           />
           <TextField
-            label="Email Address"
+            label="Email"
             name="user_email"
             type="email"
             required
@@ -70,7 +70,7 @@ function ContactPage() {
             margin="normal"
           />
           <TextField
-            label="Message"
+            label="Mensagem"
             name="message"
             multiline
             rows={4}

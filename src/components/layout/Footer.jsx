@@ -7,9 +7,9 @@ function Footer() {
 
   const menuItems = [
     { text: 'Home', path: '/' },
-    { text: 'About Us', path: '/about' },
-    { text: 'Contact', path: '/contact' },
-    { text: 'Request Quote', path: '/request-quote' },
+    { text: 'Quem Somos', path: '/about' },
+    { text: 'Contato', path: '/contact' },
+    { text: 'Solicite Cotação', path: '/request-quote' },
   ];
 
   return (
